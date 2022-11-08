@@ -3,7 +3,7 @@ using Wingspan.Model;
 
 namespace Wingspan.DB;
 
-public interface IBirdDB
+public interface IBirdsDB
 {
     public List<Bird> GetBirds();
 }
