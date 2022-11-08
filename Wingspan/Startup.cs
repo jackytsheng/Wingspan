@@ -1,8 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Wingspan.DB;
 using Wingspan.GraphQL.Schema;
+using Wingspan.Model;
 
 namespace Wingspan
 {
@@ -13,6 +18,31 @@ namespace Wingspan
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGraphQLServer().AddQueryType<Query>();
+            services.AddSingleton<IBirdsDB>(provider =>
+                {
+                    var birds = new List<Bird>();
+                    using (var reader = new StreamReader("Wingspan/DB/Birds.csv"))
+                    {
+                        while (!reader.EndOfStream)
+                        {
+                            var fields = reader.ReadLine().Split(",");
+
+                            birds.Add(
+                                new()
+                                {
+                                    CommonName = fields[0],
+                                    ScientificName = fields[1],
+                                    GameSet = fields[2],
+                                    AbilityColor = fields[3],
+                                    AbilityDescription = fields[4]
+                                }
+                            );
+                        }
+                    }
+
+                    return new LocalBirdsDb(birds);
+                }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -25,10 +55,7 @@ namespace Wingspan
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGraphQL();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapGraphQL(); });
         }
     }
 }

@@ -4,18 +4,15 @@ using Wingspan.Model;
 namespace Wingspan.DB;
 public class LocalBirdsDb : IBirdsDB
 {
+    private readonly List<Bird> _birds;
+
+    public LocalBirdsDb(List<Bird> birds)
+    {
+        _birds = birds;
+    }
+
     public List<Bird> GetBirds()
     {
-        return new()
-        {
-            new()
-            {
-                CommonName = "Bird",
-                ScientificName = "Bird",
-                GameSet = "core",
-                AbilityColor = "white",
-                AbilityDescription = "hello",
-            }
-        };
+        return _birds;
     }
 }
