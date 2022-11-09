@@ -1,12 +1,16 @@
+using Moq;
+using Wingspan.Controller;
 using Wingspan.DB;
 using Wingspan.Model;
+using Wingspan.Services;
 using Xunit;
 
-namespace WingspanTests;
-public class LocalBirdsDbTests
+namespace WingspanTests.Controller;
+
+public class BirdControllersTests
 {
     [Fact]
-    public void WhenGetBirdsIsCalled_ReturnBirds()
+    public void WhenGetBirdsIsCalled_ReturnCorrectResponse()
     {
         var testBirds = new List<Bird>
         {
@@ -28,9 +32,13 @@ public class LocalBirdsDbTests
             }
         };
 
-        var localDb = new LocalBirdsDb(testBirds);
-        var birds = localDb.GetBirds();
+        var mockServices = new Mock<IBirdServices>();
 
-        Assert.Equal(2,birds.Count);
+        mockServices.Setup(s => s.GetAllBirds()).Returns(testBirds);
+
+        var services = new BirdsController(mockServices.Object);
+        var birds = services.GetAllBirds();
+
+        Assert.Equal(2, birds.Count);
     }
 }

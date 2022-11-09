@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Wingspan.DB;
 using Wingspan.GraphQL.Schema;
 using Wingspan.Model;
+using Wingspan.Services;
 
 namespace Wingspan
 {
@@ -17,11 +18,13 @@ namespace Wingspan
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
             services.AddGraphQLServer().AddQueryType<Query>();
+            services.AddSingleton<IBirdServices, BirdServices>();
             services.AddSingleton<IBirdsDB>(provider =>
                 {
                     var birds = new List<Bird>();
-                    using (var reader = new StreamReader("Wingspan/DB/Birds.csv"))
+                    using (var reader = new StreamReader("DB/Birds.csv"))
                     {
                         while (!reader.EndOfStream)
                         {
@@ -55,7 +58,11 @@ namespace Wingspan
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints => { endpoints.MapGraphQL(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGraphQL();
+                endpoints.MapControllers();
+            });
         }
     }
 }
