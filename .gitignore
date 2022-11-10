@@ -1,6 +1,7 @@
 ﻿*.com
 *.class
-*.dll
+*.dl
+
 *.exe
 *.pdb
 *.dll.config
