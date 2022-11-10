@@ -3,6 +3,7 @@ using Wingspan.Model;
 using Xunit;
 
 namespace WingspanTests.DB;
+
 public class LocalBirdsDbTests
 {
     [Fact]
@@ -31,6 +32,6 @@ public class LocalBirdsDbTests
         var localDb = new LocalBirdsDb(testBirds);
         var birds = localDb.GetBirds();
 
-        Assert.Equal(2,birds.Count);
+        Assert.Equal(2, birds.Count);
     }
 }
