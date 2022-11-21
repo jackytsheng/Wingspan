@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using HotChocolate.Types.Descriptors;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Wingspan.DB;
+using Wingspan.GraphQL;
 using Wingspan.GraphQL.Schema;
 using Wingspan.Model;
 using Wingspan.Services;
@@ -20,7 +22,8 @@ namespace Wingspan
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddGraphQLServer().AddQueryType<Query>();
+            services.AddGraphQLServer().AddQueryType<Query>()
+                .AddConvention<INamingConventions>(new SnakeCaseNamingConvention());
             services.AddSingleton<IBirdServices, BirdServices>();
             services.AddSingleton<IBirdsDB>(provider =>
                 {
