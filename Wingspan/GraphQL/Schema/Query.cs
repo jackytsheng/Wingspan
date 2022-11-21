@@ -1,22 +1,22 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using HotChocolate;
-using Wingspan.DB;
 using Wingspan.Model;
+using Wingspan.Services;
 
 namespace Wingspan.GraphQL.Schema
 {
     public class Query
     {
-        // private readonly IBirdsDB _db;
-        //
-        // public Query (IBirdsDB db)
-        // {
-        //     _db = db;
-        // }
+        private IBirdServices _services;
 
-        public string Instruction => "Hello";
-        // public List<Bird> Birds => _db.GetBirds();
+        public Query(IBirdServices services)
+        {
+            _services = services;
+        }
+
+        public IEnumerable<Bird> GetBirds()
+        {
+            return _services.GetAllBirds();
+        }
     }
 }

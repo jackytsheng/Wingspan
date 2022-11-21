@@ -28,16 +28,17 @@ namespace Wingspan
                     using (var reader = new StreamReader("DB/Birds.csv"))
                     {
                         var count = 1;
+                        var regex = new Regex("(?!\\B\"[^\"]*),(?![^\"]*\"\\B)");
+                        // Exclude heading
+                        var fields = regex.Split(reader.ReadLine());
                         while (!reader.EndOfStream)
                         {
-                            count++;
-                            var regex = new Regex("(?!\\B\"[^\"]*),(?![^\"]*\"\\B)");
-                            var fields = regex.Split(reader.ReadLine());
+                            fields = regex.Split(reader.ReadLine());
 
                             try
                             {
                                 birds.Add(
-                                    new()
+                                    new Bird
                                     {
                                         CommonName = fields[0],
                                         ScientificName = fields[1],
@@ -56,16 +57,15 @@ namespace Wingspan
                                             fields[13] == "X" ? HabitatType.Grassland : HabitatType.Wetland
                                     }
                                 );
+                                count++;
                             }
                             catch (Exception e)
                             {
-                                Console.WriteLine($"Error occurs at {count} of the data file ");
+                                Console.WriteLine($"Error occurs at row {count} of the data file : {fields[9]} ");
                             }
                         }
                     }
 
-                    birds.RemoveAt(0);
-                    Console.WriteLine(birds.Count);
                     Console.WriteLine($"Total number of birds load : {birds.Count}");
 
                     return new LocalBirdsDb(birds);
