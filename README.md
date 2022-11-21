@@ -14,3 +14,22 @@ Through this project I am practicing the following concept
 - Basic Dependencies Injection 
 - DBContext
 - gRPC
+
+
+## Project Related
+### GraphQL
+
+Run the following schema as example
+```
+{
+  birds(first: 3) {
+    edges{
+      node {
+        common_name
+        ability_description
+        egg_capacity
+      }
+    }
+  }
+} 
+```
