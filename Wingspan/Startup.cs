@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using HotChocolate.Types.Descriptors;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +14,7 @@ using Wingspan.GraphQL;
 using Wingspan.GraphQL.Schema;
 using Wingspan.Model;
 using Wingspan.Services;
+using JsonConverter = Newtonsoft.Json.JsonConverter;
 
 namespace Wingspan
 {
@@ -21,7 +24,11 @@ namespace Wingspan
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(j =>
+                {
+                    j.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(new SnakeCasePolicy()));
+                }
+            );
             services.AddGraphQLServer().AddQueryType<Query>()
                 .AddConvention<INamingConventions>(new SnakeCaseNamingConvention());
             services.AddSingleton<IBirdServices, BirdServices>();

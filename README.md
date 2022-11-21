@@ -7,6 +7,7 @@ I am working on it ....
 ## Skills
 Through this project I am practicing the following concept
 
+- JSON Serialisation
 - Basic Controller, Services, Model Folder Structure 
 - Test Driven Design
 - Basic GraphQL ([Hot chocolate](https://chillicream.com/docs/hotchocolate/v13/get-started) from ChilliCream)

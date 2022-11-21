@@ -62,7 +62,6 @@ public class Bird
     public HabitatType Habitat { get; init; }
 }
 
-[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum HabitatType
 {
     Forest,
